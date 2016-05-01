@@ -11,6 +11,7 @@ import SpriteKit
 class GameScene: SKScene{
     
     var scrollNode:SKNode!
+    var wallNode:SKNode!
 
     override func didMoveToView(view: SKView){
         //背景色を設定
@@ -22,6 +23,7 @@ class GameScene: SKScene{
         
         setupGround()
         setupCloud()
+        setupWall()
         }
     
  /*------------------------------------------------------------------------------------------------------------*/
@@ -90,5 +92,75 @@ class GameScene: SKScene{
     }
  /*------------------------------------------------------------------------------------------------------------*/
     
+    func setupWall(){
+        //壁の画像を読み込む
+        let wallTexture = SKTexture(imageNamed: "wall")
+        wallTexture.filteringMode = .Linear
+        
+        //移動する距離を計算
+        let movingDistance = CGFloat(self.frame.size.width + wallTexture.size().width * 2 )
+        
+        //画面外まで移動するアクションを作成
+        let moveWall = SKAction.moveByX(-movingDistance, y: 0, duration:4.0)
+        
+        //自身を取り除くアクションを作成
+        let removeWall = SKAction.removeFromParent()
+        
+        //2つのアニメーションを順に実行するアクションを作成
+        let wallAnimation = SKAction.sequence([moveWall, removeWall])
+        
+        //壁を生成するアクションを作成
+        let createWallAnimation = SKAction.runBlock({
+            //壁関連のノードを載せるノードを作成
+            let wall = SKNode()
+            wall.position = CGPoint(x: self.frame.size.width + wallTexture.size().width * 2, y: 0.0)
+            wall.zPosition = -50.0//雲より手前、地面より奥
+            //画面のY軸の中央値
+            let center_y = self.frame.size.height / 2
+            //壁のY座標を上下ランダムにさせる時の最大値
+            let random_y_range = self.frame.size.height / 4
+            //したの壁のY軸の加減
+            let under_wall_lowest_y = UInt32 ( center_y - wallTexture.size().height / 2 - random_y_range / 2 )
+            
+            //ランダムな値(1~random_y_range)を生成
+            let random_y = arc4random_uniform( UInt32(random_y_range) )
+            
+            //Y軸の下限にランダムな値を足して、下の壁のY座標を決定
+            let under_wall_y = CGFloat (under_wall_lowest_y + random_y)
+            
+            //キャラが通り抜ける隙間の長さ
+            let slit_length = self.frame.size.height / 6
+            
+            //下側の壁を作成
+            let under = SKSpriteNode (texture: wallTexture)
+            under.position = CGPoint(x: 0.0, y: under_wall_y)
+            wall.addChild(under)
+            
+            //上側の壁を作成
+            let upper = SKSpriteNode (texture: wallTexture)
+            upper.position = CGPoint(x: 0.0, y: under_wall_y + wallTexture.size().height + slit_length )
+            
+            wall.addChild(upper)
+            
+            wall .runAction(wallAnimation)
+            
+            self.wallNode.addChild(wall)
+        })
+        //次の壁作成までの待ち時間のアクションを作成
+        let waitAnimation = SKAction.waitForDuration(2)
+        
+        //壁を作成->待ち時間->壁を無限にくりかえるアクションを作成
+        let repeatForeverAnimation = SKAction.repeatActionForever(SKAction.sequence([createWallAnimation , waitAnimation]))
+        
+        runAction(repeatForeverAnimation)
+    }
     
+ /*------------------------------------------------------------------------------------------------------------*/
+    func setupBird(){
+        //鳥の画像を2種類読み込む
+        //2種類のてきすちゃを交互に変更するアニメーションを作成
+        //スプライトを作成
+        //アニメーションを設定
+        //スプライトを追加する
+    }
 }
