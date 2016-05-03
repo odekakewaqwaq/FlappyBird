@@ -12,6 +12,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
     
     var scrollNode:SKNode!
     var wallNode:SKNode!
+    var appleNode:SKNode!
     var bird:SKSpriteNode!
 
     //衝突判定カテゴリー
@@ -41,10 +42,13 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         
         wallNode = SKNode()
         scrollNode.addChild(wallNode)
+        appleNode = SKNode()
+        scrollNode.addChild(appleNode)
         
         setupGround()
         setupCloud()
         setupWall()
+        setupApple()
         setupBird()
         setupScoreLabel()
     
@@ -186,10 +190,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         wallTexture.filteringMode = .Linear
         
         // 移動する距離を計算
-        let movingDistance = CGFloat(self.frame.size.width + wallTexture.size().width * 2)
+        let movingDistance = CGFloat(self.frame.size.width + wallTexture.size().width * 2)//フレームの幅＋テクスチャ２枚分
         
         // 画面外まで移動するアクションを作成
-        let moveWall = SKAction.moveByX(-movingDistance, y: 0, duration:4.0)
+        let moveWall = SKAction.moveByX(-movingDistance, y: 0, duration:4.0)//4秒かけて移動距離を進む。距離とdurationはりんごと揃える必要がある？
         
         // 自身を取り除くアクションを作成
         let removeWall = SKAction.removeFromParent()
@@ -201,7 +205,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         let createWallAnimation = SKAction.runBlock({
             // 壁関連のノードを乗せるノードを作成
             let wall = SKNode()
-            wall.position = CGPoint(x: self.frame.size.width + wallTexture.size().width * 2, y: 0.0)
+            wall.position = CGPoint(x: self.frame.size.width + wallTexture.size().width * 2, y: 0.0)//壁の初期位置、ここを距離分ずらせばいい？
             wall.zPosition = -50.0 // 雲より手前、地面より奥
             
             // 画面のY軸の中央値
@@ -216,7 +220,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
             let under_wall_y = CGFloat(under_wall_lowest_y + random_y)
             
             // キャラが通り抜ける隙間の長さ
-            let slit_length = self.frame.size.height / 6
+            let slit_length = self.frame.size.height / 4
             
             // 下側の壁を作成
             let under = SKSpriteNode(texture: wallTexture)
@@ -327,11 +331,62 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         self.addChild(bestScoreLabelNode)
     }
     
-}
+
  /*------------------------------------------------------------------------------------------------------------*/
+func setupApple() {
+    // 壁の画像を読み込む
+    let appleTexture = SKTexture(imageNamed: "apple")
+    appleTexture.filteringMode = .Linear
+    
+    // 移動する距離を計算
+    let movingDistance = CGFloat(self.frame.size.width + appleTexture.size().width * 2)
+    
+    // 画面外まで移動するアクションを作成
+    let moveApple = SKAction.moveByX(-movingDistance, y: 0, duration:4.0)
+    
+    // 自身を取り除くアクションを作成
+    let removeApple = SKAction.removeFromParent()
+    
+    let appleAnimation = SKAction.sequence([moveApple, removeApple])
+    
+    // 壁を生成するアクションを作成
+    let createAppleAnimation = SKAction.runBlock({
+        // 壁関連のノードを乗せるノードを作成
+        let apple = SKNode()
+        apple.position = CGPoint(x:(self.frame.size.width + appleTexture.size().width * 2) * 1.25, y: 0.0)
+        apple.zPosition = -50.0 // 雲より手前、地面より奥
+        
+        // 画面のY軸の中央値
+        let center_y = self.frame.size.height / 2
+        // 壁のY座標を上下ランダムにさせるときの最大値
+        let random_y_range = self.frame.size.height / 4
+        // 下の壁のY軸の下限
+        let under_wall_lowest_y = UInt32( center_y - appleTexture.size().height / 2 -  random_y_range / 2)
+        // 1〜random_y_rangeまでのランダムな整数を生成
+        let random_y = arc4random_uniform( UInt32(random_y_range) )
+        // Y軸の下限にランダムな値を足して、下の壁のY座標を決定
+        let under_wall_y = CGFloat(under_wall_lowest_y + random_y)
+        
+        // 下側の壁を作成
+        let under = SKSpriteNode(texture: appleTexture)
+        under.position = CGPoint(x: 0.0, y: under_wall_y)
+        apple.addChild(under)
+        
+        apple.runAction(appleAnimation)
+        self.appleNode.addChild(apple)
+    })
+    
+    // 次の壁作成までの待ち時間のアクションを作成
+    let waitAnimation = SKAction.waitForDuration(2)
+    
+    // 壁を作成->待ち時間->壁を作成を無限に繰り替えるアクションを作成
+    let repeatForeverAnimation = SKAction.repeatActionForever(SKAction.sequence([createAppleAnimation, waitAnimation]))
+    
+    runAction(repeatForeverAnimation)
+}
 
+}
 
- 
 
 
 
