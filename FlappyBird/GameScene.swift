@@ -60,6 +60,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
  /*------------------------------------------------------------------------------------------------------------*/
 
     func didBeginContact(contact: SKPhysicsContact) {
+        let itemGetSound = SKAction.playSoundFileNamed("itemGet", waitForCompletion: false)
+        
         if scrollNode.speed <= 0{
             return
         }
@@ -79,6 +81,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         }
         else if (contact.bodyA.categoryBitMask & itemScoreCategory) == itemScoreCategory || (contact.bodyB.categoryBitMask & itemScoreCategory) == itemScoreCategory{
             print("getItem")
+            self.runAction(itemGetSound)
             self.itemScore++
             itemScoreLabelNode.text = "itemScore:\(itemScore)"
         }
