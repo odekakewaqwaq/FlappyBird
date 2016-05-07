@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8558F6581CDE0BA0009DC9B6 /* itemGet.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8558F6571CDE0BA0009DC9B6 /* itemGet.wav */; };
+		8558F65A1CDE1F96009DC9B6 /* itemGet.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8558F6591CDE1F96009DC9B6 /* itemGet.wav */; };
 		85BFD6BC1CD38F5B00D70B33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BFD6BB1CD38F5B00D70B33 /* AppDelegate.swift */; };
 		85BFD6BE1CD38F5B00D70B33 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BFD6BD1CD38F5B00D70B33 /* ViewController.swift */; };
 		85BFD6C11CD38F5B00D70B33 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85BFD6BF1CD38F5B00D70B33 /* Main.storyboard */; };
@@ -18,7 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8558F6571CDE0BA0009DC9B6 /* itemGet.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = itemGet.wav; path = ../../../../../Downloads/itemGet.wav; sourceTree = "<group>"; };
+		8558F6591CDE1F96009DC9B6 /* itemGet.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = itemGet.wav; sourceTree = "<group>"; };
 		85BFD6B81CD38F5B00D70B33 /* FlappyBird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlappyBird.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85BFD6BB1CD38F5B00D70B33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85BFD6BD1CD38F5B00D70B33 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,9 +65,9 @@
 				85BFD6BB1CD38F5B00D70B33 /* AppDelegate.swift */,
 				85BFD6BD1CD38F5B00D70B33 /* ViewController.swift */,
 				85BFD6BF1CD38F5B00D70B33 /* Main.storyboard */,
-				8558F6571CDE0BA0009DC9B6 /* itemGet.wav */,
 				85BFD6C21CD38F5B00D70B33 /* Assets.xcassets */,
 				85BFD6CF1CD3DC1E00D70B33 /* GameScene.swift */,
+				8558F6591CDE1F96009DC9B6 /* itemGet.wav */,
 				85BFD6C41CD38F5B00D70B33 /* LaunchScreen.storyboard */,
 				85BFD6C71CD38F5B00D70B33 /* Info.plist */,
 			);
@@ -135,7 +135,7 @@
 			files = (
 				85BFD6C61CD38F5B00D70B33 /* LaunchScreen.storyboard in Resources */,
 				85BFD6C31CD38F5B00D70B33 /* Assets.xcassets in Resources */,
-				8558F6581CDE0BA0009DC9B6 /* itemGet.wav in Resources */,
+				8558F65A1CDE1F96009DC9B6 /* itemGet.wav in Resources */,
 				85BFD6C11CD38F5B00D70B33 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
