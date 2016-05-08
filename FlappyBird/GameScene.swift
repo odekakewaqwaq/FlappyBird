@@ -12,7 +12,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
     
     var scrollNode:SKNode!
     var wallNode:SKNode!
-    var appleNode:SKNode!
+    //var appleNode:SKNode!
     var bird:SKSpriteNode!
 
     //衝突判定カテゴリー
@@ -45,8 +45,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         
         wallNode = SKNode()
         scrollNode.addChild(wallNode)
-        appleNode = SKNode()
-        scrollNode.addChild(appleNode)
+        //appleNode = SKNode()
+        //scrollNode.addChild(appleNode)
         
         setupGround()
         setupCloud()
@@ -82,10 +82,15 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         else if (contact.bodyA.categoryBitMask & itemScoreCategory) == itemScoreCategory || (contact.bodyB.categoryBitMask & itemScoreCategory) == itemScoreCategory{
             print("getItem")
             //SKAction.removeFromParent()
-            appleNode.childNodeWithName("item")?.removeFromParent()
             self.runAction(itemGetSound)
             self.itemScore++
             itemScoreLabelNode.text = "itemScore:\(itemScore)"
+            if (contact.bodyA.categoryBitMask & itemScoreCategory) == itemScoreCategory{
+                contact.bodyA.node!.removeFromParent()
+            }else{
+                contact.bodyB.node!.removeFromParent()
+            }
+            
         }
         else{
             //壁か地面と衝突
@@ -117,7 +122,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         bird.zRotation = 0.0
         
         wallNode.removeAllChildren()
-        appleNode.removeAllChildren()
+        //appleNode.removeAllChildren()
         
         bird.speed = 1
         scrollNode.speed = 1
@@ -390,24 +395,24 @@ func setupApple() {
         let random_y = arc4random_uniform( UInt32(random_y_range) )
         // Y軸の下限にランダムな値を足して、下の壁のY座標を決定
         let apple_y = CGFloat(apple_lowest_y + random_y)
-
+        //アイテムの表示の設定
         let apple = SKSpriteNode(texture: appleTexture)
-        apple.position = CGPoint(x: 0.0, y: apple_y)
-        item.addChild(apple)
+        apple.position = CGPoint(x:0.0,y: 0.0)
         
         //アイテムスコア用の設定ここから↓↓↓↓↓↓↓↓↓↓↓↓↓
         let itemScoreNode = SKNode()
-        itemScoreNode.position = apple.position
+        itemScoreNode.position = CGPoint(x: 0.0, y: apple_y)
         itemScoreNode.physicsBody = SKPhysicsBody(circleOfRadius: appleTexture.size().height / 2)
         itemScoreNode.physicsBody?.dynamic = false
         itemScoreNode.physicsBody?.categoryBitMask = self.itemScoreCategory
         itemScoreNode.physicsBody?.contactTestBitMask = self.birdCategory
         
         item.addChild(itemScoreNode)
+        itemScoreNode.addChild(apple)
         //アイテムスコア用の設定ここまで↑↑↑↑↑↑↑↑↑↑↑↑↑
         
         item.runAction(appleAnimation)
-        self.appleNode.addChild(item)
+        self.wallNode.addChild(item)
     })
     
     // 次の壁作成までの待ち時間のアクションを作成
