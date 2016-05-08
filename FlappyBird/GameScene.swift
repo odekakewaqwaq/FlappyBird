@@ -15,6 +15,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
     var appleNode:SKNode!
     var bird:SKSpriteNode!
 
+    var groupActionFly: SKAction!
+    
     //衝突判定カテゴリー
     let birdCategory: UInt32 = 1<<0
     let groundCategory: UInt32 = 1<<1 //ここが何やってるのか正直わからん。１をそのケタ数分ずらすの？もっとたくさんのものが出てきたときは？
@@ -286,11 +288,11 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
     
     func setupBird(){
         //鳥の画像を2種類読み込む
-        let birdTextureA = SKTexture(imageNamed: "bird_a")
+        let birdTextureA = SKTexture(imageNamed: "mobasi")
         birdTextureA.filteringMode = SKTextureFilteringMode.Linear
-        let birdTextureB = SKTexture(imageNamed: "bird_b")
+        let birdTextureB = SKTexture(imageNamed: "mobasi")
         birdTextureB.filteringMode = SKTextureFilteringMode.Linear
-        
+
         //2種類のてきすちゃを交互に変更するアニメーションを作成
         let texturesAnimation = SKAction.animateWithTextures([birdTextureA,birdTextureB], timePerFrame: 0.2)//([birdTextureA,birdTextureB] , timePerFrame: 0.2)
         let flap = SKAction.repeatActionForever(texturesAnimation)
@@ -323,6 +325,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         if scrollNode.speed > 0{
             bird.physicsBody?.velocity = CGVector.zero
             bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 15))
+            bird.runAction(SKAction.playSoundFileNamed("flap", waitForCompletion: false))
+            bird.runAction(SKAction.rotateByAngle(CGFloat(M_PI / 4), duration: 0.5))
         }else if bird.speed == 0 {
             restart()
         }
