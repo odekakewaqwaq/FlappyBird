@@ -81,6 +81,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         }
         else if (contact.bodyA.categoryBitMask & itemScoreCategory) == itemScoreCategory || (contact.bodyB.categoryBitMask & itemScoreCategory) == itemScoreCategory{
             print("getItem")
+            //SKAction.removeFromParent()
+            appleNode.childNodeWithName("item")?.removeFromParent()
             self.runAction(itemGetSound)
             self.itemScore++
             itemScoreLabelNode.text = "itemScore:\(itemScore)"
@@ -354,7 +356,6 @@ class GameScene: SKScene,SKPhysicsContactDelegate{
         self.addChild(itemScoreLabelNode)
     }
     
-
  /*------------------------------------------------------------------------------------------------------------*/
 func setupApple() {
     // 壁の画像を読み込む
